@@ -22,7 +22,7 @@ spec:
 
       containers:
         - name: sentiment-backend
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:5
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:1
 
           ports:
             - containerPort: 8000
