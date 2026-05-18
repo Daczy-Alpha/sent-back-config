@@ -16,19 +16,15 @@ kind: Deployment
 metadata:
   name: sentiment-backend-api
   namespace: sentiment-app
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: sentiment-backend-api
-
   template:
     metadata:
       labels:
         app: sentiment-backend-api
-
     spec:
       nodeSelector:
         role: backend
@@ -71,20 +67,18 @@ kind: Deployment
 metadata:
   name: sentiment-backend-scheduler
   namespace: sentiment-app
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: sentiment-backend-scheduler
-
   template:
     metadata:
       labels:
         app: sentiment-backend-scheduler
-
     spec:
+      restartPolicy: Always
+
       nodeSelector:
         role: backend
 
@@ -110,6 +104,14 @@ spec:
           volumeMounts:
             - name: sqlite-data
               mountPath: /app/data
+
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
 
       volumes:
         - name: sqlite-data
