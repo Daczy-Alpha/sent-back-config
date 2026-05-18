@@ -40,8 +40,17 @@ spec:
                   name: backend-secret
                   key: NEWS_API_KEY
 
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /app/data
+
+      volumes:
+        - name: sqlite-data
+          emptyDir: {}
+
       imagePullSecrets:
         - name: ecr-secret
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -83,6 +92,14 @@ spec:
                 secretKeyRef:
                   name: backend-secret
                   key: FRONTEND_URL
+
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /app/data
+
+      volumes:
+        - name: sqlite-data
+          emptyDir: {}
 
       imagePullSecrets:
         - name: ecr-secret
