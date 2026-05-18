@@ -22,7 +22,7 @@ spec:
 
       containers:
         - name: sentiment-backend-api
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:1
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:3
 
           ports:
             - containerPort: 8000
@@ -67,7 +67,7 @@ spec:
 
       containers:
         - name: sentiment-backend-scheduler
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:1
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:3
 
           command: ["python", "scheduler.py"]
 
