@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-sqlite-pvc
+  namespace: sentiment-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +18,7 @@ metadata:
   namespace: sentiment-app
 
 spec:
-  replicas: 3
+  replicas: 1
 
   selector:
     matchLabels:
@@ -46,7 +59,8 @@ spec:
 
       volumes:
         - name: sqlite-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: backend-sqlite-pvc
 
       imagePullSecrets:
         - name: ecr-secret
@@ -99,7 +113,8 @@ spec:
 
       volumes:
         - name: sqlite-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: backend-sqlite-pvc
 
       imagePullSecrets:
         - name: ecr-secret
