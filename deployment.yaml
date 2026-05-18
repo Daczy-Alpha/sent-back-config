@@ -1,117 +1,58 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: backend-sqlite-pvc
-  namespace: sentiment-app
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sentiment-backend-api
+  name: sentiment-backend
   namespace: sentiment-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sentiment-backend-api
+      app: sentiment-backend
   template:
     metadata:
       labels:
-        app: sentiment-backend-api
+        app: sentiment-backend
     spec:
       nodeSelector:
         role: backend
 
       containers:
         - name: sentiment-backend-api
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:5
-
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:4
           ports:
             - containerPort: 8000
-
           env:
             - name: FRONTEND_URL
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: FRONTEND_URL
-
             - name: NEWS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: NEWS_API_KEY
-
           volumeMounts:
             - name: sqlite-data
               mountPath: /app/data
 
-      volumes:
-        - name: sqlite-data
-          persistentVolumeClaim:
-            claimName: backend-sqlite-pvc
-
-      imagePullSecrets:
-        - name: ecr-secret
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: sentiment-backend-scheduler
-  namespace: sentiment-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: sentiment-backend-scheduler
-  template:
-    metadata:
-      labels:
-        app: sentiment-backend-scheduler
-    spec:
-      restartPolicy: Always
-
-      nodeSelector:
-        role: backend
-
-      containers:
         - name: sentiment-backend-scheduler
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:5
-
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:4
           command: ["python", "scheduler.py"]
-
           env:
             - name: NEWS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: NEWS_API_KEY
-
             - name: FRONTEND_URL
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: FRONTEND_URL
-
           volumeMounts:
             - name: sqlite-data
               mountPath: /app/data
-
-          resources:
-            requests:
-              memory: "1Gi"
-              cpu: "250m"
-            limits:
-              memory: "2Gi"
-              cpu: "1000m"
 
       volumes:
         - name: sqlite-data
