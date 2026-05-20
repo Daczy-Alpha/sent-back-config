@@ -31,7 +31,7 @@ spec:
 
       containers:
         - name: sentiment-backend-api
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:7
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:8
           ports:
             - containerPort: 8000
           env:
@@ -73,7 +73,7 @@ spec:
 
       containers:
         - name: sentiment-backend-scheduler
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:7
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:8
           command: ["python", "scheduler.py"]
           env:
             - name: NEWS_API_KEY
