@@ -5,12 +5,14 @@ metadata:
   namespace: sentiment-app
 
 spec:
-  type: ClusterIP
+  type: NodePort
 
   selector:
     app: sentiment-backend-api
 
   ports:
-    - port: 8000
+    - name: http
+      port: 8000
       targetPort: 8000
+      nodePort: 30081
       protocol: TCP
