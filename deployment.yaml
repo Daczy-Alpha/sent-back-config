@@ -32,14 +32,17 @@ spec:
       containers:
         - name: sentiment-backend-api
           image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:8
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
+
           env:
             - name: FRONTEND_URL
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: FRONTEND_URL
+
           volumeMounts:
             - name: sqlite-data
               mountPath: /app/data
@@ -48,15 +51,27 @@ spec:
             httpGet:
               path: /
               port: 8000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
             periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
 
           livenessProbe:
             httpGet:
               path: /
               port: 8000
-            initialDelaySeconds: 30
+            initialDelaySeconds: 45
             periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
 
       volumes:
         - name: sqlite-data
@@ -88,16 +103,27 @@ spec:
       containers:
         - name: sentiment-backend-scheduler
           image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:8
+          imagePullPolicy: Always
           command: ["python", "scheduler.py"]
+
           env:
             - name: NEWS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: backend-secret
                   key: NEWS_API_KEY
+
           volumeMounts:
             - name: sqlite-data
               mountPath: /app/data
+
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi"
+              cpu: "2"
 
       volumes:
         - name: sqlite-data
