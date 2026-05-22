@@ -34,7 +34,7 @@ spec:
 
       containers:
         - name: sentiment-backend-api
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:11
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:12
           imagePullPolicy: IfNotPresent
 
           ports:
@@ -109,7 +109,7 @@ spec:
 
       containers:
         - name: sentiment-backend-scheduler
-          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:11
+          image: 487620625686.dkr.ecr.eu-north-1.amazonaws.com/sentiment-backend:12
           imagePullPolicy: IfNotPresent
 
           command: ["python", "scheduler.py"]
